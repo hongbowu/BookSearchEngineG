@@ -1,4 +1,4 @@
-const { User, Book } = require('../models');
+const { User } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 
 const resolvers = {
@@ -36,11 +36,6 @@ const resolvers = {
 
             const token = signToken(user);
             return { token, user };
-        },
-
-        addBook: async (parent, { authors, description, bookId, image, link, title }) => {
-            const book = await Book.create({ authors, description, bookId, image, link, title });
-            return book;
         },
 
         addBooksToUser: async (parent, { userId, books }, context) => {
