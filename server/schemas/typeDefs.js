@@ -1,6 +1,6 @@
 const typeDefs =`
     type Book {
-        authors: [{String}]
+        authors: [String]
         description: String!
         bookId: String!
         image: String
@@ -27,6 +27,7 @@ const typeDefs =`
         addUser(name: String!, email: String!, password: String!): Auth
         login(email: String!, password: String!): Auth
 
+        addBook(authors: [String], description: String!, bookId: String!, image: String, link: String, title: String): Book
         addBooksToUser(userId: ID!, savedBooks: [Book]): User
         removeUser: User
         removeBook(bookId: ID!): User

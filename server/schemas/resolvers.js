@@ -21,6 +21,7 @@ const resolvers = {
             const token = signToken(user);
             return { token, user };
         },
+
         login: async (parent, { email, password }) => {
             const user = await User.findOne({ email });
             if (!user) {
@@ -37,12 +38,17 @@ const resolvers = {
             return { token, user };
         },
 
-        addBooksToUser: async (parent, { userId, book }, context) => {
+        addBook: async (parent, { authors, description, bookId, image, link, title }) => {
+            const book = await Book.create({ authors, description, bookId, image, link, title });
+            return book;
+        },
+
+        addBooksToUser: async (parent, { userId, books }, context) => {
             if (context.user) {
                 return User.findOneAndUpdate(
                     { _id: userId },
                     {
-                        $addToSet: { savedBooks: [book] },
+                        $push: { savedBooks: { $each: books } },
                     },
                     {
                         new: true,
@@ -61,11 +67,11 @@ const resolvers = {
             throw AuthenticationError;
         },
 
-        removeBook: async (parent, { book }, context) => {
+        removeBook: async (parent, { bookId }, context) => {
             if (context.user) {
                 return User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $pull: { savedBooks: [book] } },
+                    { $pull: { savedBooks: { bookId } } },
                     { new: true }
                 )
             }
