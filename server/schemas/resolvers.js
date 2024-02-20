@@ -37,12 +37,12 @@ const resolvers = {
             return { token, user };
         },
 
-        addBook: async (parent, { userId, books }, context) => {
+        addBooksToUser: async (parent, { userId, book }, context) => {
             if (context.user) {
                 return User.findOneAndUpdate(
                     { _id: userId },
                     {
-                        $addToSet: { savedBooks: [books] },
+                        $addToSet: { savedBooks: [book] },
                     },
                     {
                         new: true,
@@ -54,7 +54,13 @@ const resolvers = {
             throw AuthenticationError;
         },
 
-        removeUser: 
+        removeUser: async (parent, args, context) => {
+            if (context.user) {
+                return User.findOneAndDelete({ _id: context.user._id });
+            }
+            throw AuthenticationError;
+        },
+        
     }
 }
 module.exports = resolvers;
