@@ -60,7 +60,18 @@ const resolvers = {
             }
             throw AuthenticationError;
         },
-        
+
+        removeBook: async (parent, { book }, context) => {
+            if (context.user) {
+                return User.findOneAndUpdate(
+                    { _id: context.user._id },
+                    { $pull: { savedBooks: [book] } },
+                    { new: true }
+                )
+            }
+            throw AuthenticationError;
+        }
     }
-}
+};
+
 module.exports = resolvers;
