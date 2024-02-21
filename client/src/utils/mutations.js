@@ -33,3 +33,13 @@ export const ADD_BOOK = gql`
     }
   }
 `;
+
+export const REMOVE_BOOK = gql`
+  mutation removeBook($book: String!) {
+    removeBook(book: $book) {
+      _id
+      name
+      savedBooks
+    }
+  }
+`;
